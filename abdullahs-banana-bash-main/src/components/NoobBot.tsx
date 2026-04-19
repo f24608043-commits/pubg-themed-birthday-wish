@@ -23,11 +23,11 @@ const NoobBot = () => {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center overflow-hidden pt-11 px-4">
-      {/* GIF Background - PUBG Monkey GIF */}
+      {/* GIF Background - Plays.tv Squad GIF */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: `url('/playerunknowns-battlegrounds.gif')`,
+          backgroundImage: `url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTYyZ2NmbW1yNWt0cnc2bWNsbGVnM3RqbjRwa2FieWNnN21mYmtycCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l3mZg3lrvxDjM7pks/giphy.gif')`,
         }}
       >
         <div className="absolute inset-0 bg-[#1a1a1a]/70" />
