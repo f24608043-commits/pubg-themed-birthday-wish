@@ -1,0 +1,415 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* PUBG Military Theme - Dark tactical aesthetic */
+
+@layer base {
+  :root {
+    /* PUBG Color System - Grey/Dark Theme */
+    --bg-deep: #3a3a3a;
+    --surface: #4a4a4a;
+    --surface-light: #5a5a5a;
+    --border-bronze: #6b5a2a;
+    --amber: #d4910a;
+    --amber-hover: #c8a84b;
+    --brass: #c8a84b;
+    --text-primary: #2a2a2a;
+    --text-muted: #8a7d5a;
+    --military-green: #5a7a3a;
+    --health-green: #4a9a3a;
+    --danger-red: #8b2a1a;
+    --warning-stripe: #8b2a1a;
+    --white: #e8e8e8;
+    --black: #1a1a1a;
+
+    /* Tailwind CSS Variables mapped to PUBG theme */
+    --background: 30 25% 4%;
+    --foreground: 40 20% 93%;
+
+    --card: 30 20% 8%;
+    --card-foreground: 40 20% 93%;
+
+    --popover: 30 20% 8%;
+    --popover-foreground: 40 20% 93%;
+
+    --primary: 38 87% 43%;
+    --primary-foreground: 30 25% 4%;
+
+    --secondary: 82 35% 36%;
+    --secondary-foreground: 40 20% 93%;
+
+    --muted: 30 15% 12%;
+    --muted-foreground: 40 15% 42%;
+
+    --accent: 38 87% 43%;
+    --accent-foreground: 30 25% 4%;
+
+    --destructive: 14 69% 33%;
+    --destructive-foreground: 40 20% 93%;
+
+    --border: 42 45% 29%;
+    --input: 42 45% 29%;
+    --ring: 38 87% 43%;
+
+    --radius: 0px;
+
+    /* Typography */
+    --font-heading: 'Teko', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-handwritten: 'Caveat', cursive;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-[#3a3a3a] text-[#2a2a2a];
+    font-family: var(--font-body);
+    cursor: crosshair;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+@layer components {
+  /* PUBG Button Style */
+  .pubg-btn {
+    @apply inline-flex items-center justify-center px-8 py-3;
+    background: var(--amber);
+    color: var(--black);
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    border: none;
+    border-radius: 0;
+    transition: all 0.2s ease;
+  }
+
+  .pubg-btn:hover {
+    background: var(--amber-hover);
+    transform: scale(1.02);
+  }
+
+  /* PUBG Panel with corner brackets */
+  .pubg-panel {
+    background: rgba(58, 58, 58, 0.95);
+    border: 1px solid var(--border-bronze);
+    position: relative;
+  }
+
+  .pubg-panel::before,
+  .pubg-panel::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 1px solid var(--amber);
+  }
+
+  .pubg-panel::before {
+    top: -1px;
+    left: -1px;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .pubg-panel::after {
+    bottom: -1px;
+    right: -1px;
+    border-left: none;
+    border-top: none;
+  }
+
+  /* Scanline overlay */
+  .scanlines {
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.015) 2px,
+      rgba(255, 255, 255, 0.015) 4px
+    );
+    pointer-events: none;
+  }
+
+  /* HUD Bar */
+  .hud-bar {
+    background: rgba(20, 20, 20, 0.98);
+    border-bottom: 1px solid #4a4a4a;
+  }
+
+  /* Stat bar track */
+  .stat-track {
+    background: #1a1a1a;
+    height: 4px;
+  }
+
+  .stat-fill {
+    background: var(--amber);
+    height: 100%;
+    transition: width 1s ease-out;
+  }
+
+  /* Warning stripes */
+  .warning-stripes {
+    background: repeating-linear-gradient(
+      45deg,
+      var(--warning-stripe) 0px,
+      var(--warning-stripe) 10px,
+      #1a1a1a 10px,
+      #1a1a1a 20px
+    );
+  }
+
+  /* Military green text */
+  .text-military {
+    color: var(--military-green);
+  }
+
+  .text-amber {
+    color: var(--amber);
+  }
+
+  /* Corner brackets only */
+  .corner-brackets {
+    position: relative;
+  }
+
+  .corner-brackets::before,
+  .corner-brackets::after,
+  .corner-brackets > span::before,
+  .corner-brackets > span::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 1px solid var(--amber);
+  }
+
+  .corner-brackets::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .corner-brackets::after { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+  .corner-brackets > span::before { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+  .corner-brackets > span::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+}
+
+/* PUBG Animations */
+@keyframes ember-rise {
+  0% {
+    transform: translateY(100vh) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-20vh) translateX(20px);
+    opacity: 0;
+  }
+}
+
+@keyframes glitch {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-2px); }
+  40% { transform: translateX(2px); }
+  60% { transform: translateX(-1px); }
+  80% { transform: translateX(1px); }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes pulse-opacity {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes radar-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes radar-ping {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes crate-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes lid-flip {
+  0% { transform: rotateX(0); }
+  100% { transform: rotateX(-110deg); }
+}
+
+@keyframes character-bounce {
+  0% { transform: translateY(100px) scale(0.8); opacity: 0; }
+  50% { transform: translateY(-20px) scale(1.05); }
+  70% { transform: translateY(10px) scale(0.98); }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes confetti-burst {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) rotate(720deg) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes firework-burst {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in-left {
+  0% { transform: translateX(-100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  0% { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fade-in-up {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes progress-fill {
+  0% { width: 0%; }
+  100% { width: var(--progress); }
+}
+
+@keyframes screen-shake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-3px); }
+  20% { transform: translateX(3px); }
+  30% { transform: translateX(-2px); }
+  40% { transform: translateX(2px); }
+  50% { transform: translateX(-1px); }
+  60% { transform: translateX(1px); }
+  70%, 90% { transform: translateX(0); }
+}
+
+@keyframes kill-feed-slide {
+  0% { transform: translateX(100%); opacity: 0; }
+  10% { transform: translateX(0); opacity: 1; }
+  90% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes card-flip {
+  0% { transform: rotateY(0); }
+  100% { transform: rotateY(180deg); }
+}
+
+/* Utility classes for animations */
+.animate-ember {
+  animation: ember-rise 8s ease-in infinite;
+}
+
+.animate-glitch {
+  animation: glitch 0.3s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.animate-glitch:hover {
+  animation-play-state: running;
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+.animate-pulse-opacity {
+  animation: pulse-opacity 2s ease-in-out infinite;
+}
+
+.animate-radar {
+  animation: radar-spin 4s linear infinite;
+}
+
+.animate-radar-ping {
+  animation: radar-ping 2s ease-out infinite;
+}
+
+.animate-crate-bob {
+  animation: crate-bob 2.5s ease-in-out infinite;
+}
+
+.animate-character-bounce {
+  animation: character-bounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.animate-screen-shake {
+  animation: screen-shake 0.3s ease-in-out;
+}
+
+.animate-kill-feed {
+  animation: kill-feed-slide 5s ease-in-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.5s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+/* Font utilities */
+.font-teko {
+  font-family: 'Teko', sans-serif;
+}
+
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+
+.font-caveat {
+  font-family: 'Caveat', cursive;
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
