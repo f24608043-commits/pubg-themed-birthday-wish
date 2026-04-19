@@ -4,6 +4,7 @@ import HeroSection from "@/components/HeroSection";
 import MissionBriefing from "@/components/MissionBriefing";
 import AirdropCrate from "@/components/AirdropCrate";
 import SquadGallery from "@/components/SquadGallery";
+import NoobBot from "@/components/NoobBot";
 import PlayerStats from "@/components/PlayerStats";
 import BirthdayCard from "@/components/BirthdayCard";
 import ChickenDinner from "@/components/ChickenDinner";
@@ -122,9 +123,17 @@ const Index = () => {
           <SquadGallery />
         </section>
 
-        {/* Player Stats Section */}
+        {/* Noob Bot Roast Section */}
         <section
           ref={(el) => { sectionRefs.current[4] = el; }}
+          className="min-h-screen"
+        >
+          <NoobBot />
+        </section>
+
+        {/* Player Stats Section */}
+        <section
+          ref={(el) => { sectionRefs.current[5] = el; }}
           className="min-h-screen"
         >
           <PlayerStats />
@@ -132,7 +141,7 @@ const Index = () => {
 
         {/* Birthday Card Section */}
         <section
-          ref={(el) => { sectionRefs.current[5] = el; }}
+          ref={(el) => { sectionRefs.current[6] = el; }}
           className="min-h-screen"
         >
           <BirthdayCard />
@@ -140,7 +149,7 @@ const Index = () => {
 
         {/* Chicken Dinner Finale Section */}
         <section
-          ref={(el) => { sectionRefs.current[6] = el; }}
+          ref={(el) => { sectionRefs.current[7] = el; }}
           className="min-h-screen"
         >
           <ChickenDinner onRestart={scrollToTop} />
