@@ -4,6 +4,8 @@ import HeroSection from "@/components/HeroSection";
 import MissionBriefing from "@/components/MissionBriefing";
 import AirdropCrate from "@/components/AirdropCrate";
 import SquadGallery from "@/components/SquadGallery";
+import AboutMe from "@/components/AboutMe";
+import Quiz from "@/components/Quiz";
 import NoobBot from "@/components/NoobBot";
 import PlayerStats from "@/components/PlayerStats";
 import BirthdayCard from "@/components/BirthdayCard";
@@ -115,9 +117,25 @@ const Index = () => {
           <AirdropCrate />
         </section>
 
-        {/* Squad Gallery Section */}
+        {/* About Me Section */}
         <section
           ref={(el) => { sectionRefs.current[3] = el; }}
+          className="min-h-screen"
+        >
+          <AboutMe />
+        </section>
+
+        {/* Quiz Section */}
+        <section
+          ref={(el) => { sectionRefs.current[4] = el; }}
+          className="min-h-screen"
+        >
+          <Quiz />
+        </section>
+
+        {/* Squad Gallery Section */}
+        <section
+          ref={(el) => { sectionRefs.current[5] = el; }}
           className="min-h-screen"
         >
           <SquadGallery />
@@ -125,7 +143,7 @@ const Index = () => {
 
         {/* Noob Bot Roast Section */}
         <section
-          ref={(el) => { sectionRefs.current[4] = el; }}
+          ref={(el) => { sectionRefs.current[6] = el; }}
           className="min-h-screen"
         >
           <NoobBot />
@@ -133,7 +151,7 @@ const Index = () => {
 
         {/* Player Stats Section */}
         <section
-          ref={(el) => { sectionRefs.current[5] = el; }}
+          ref={(el) => { sectionRefs.current[7] = el; }}
           className="min-h-screen"
         >
           <PlayerStats />
@@ -141,7 +159,7 @@ const Index = () => {
 
         {/* Birthday Card Section */}
         <section
-          ref={(el) => { sectionRefs.current[6] = el; }}
+          ref={(el) => { sectionRefs.current[8] = el; }}
           className="min-h-screen"
         >
           <BirthdayCard />
@@ -149,7 +167,7 @@ const Index = () => {
 
         {/* Chicken Dinner Finale Section */}
         <section
-          ref={(el) => { sectionRefs.current[7] = el; }}
+          ref={(el) => { sectionRefs.current[9] = el; }}
           className="min-h-screen"
         >
           <ChickenDinner onRestart={scrollToTop} />
