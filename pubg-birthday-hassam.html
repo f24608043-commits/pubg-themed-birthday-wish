@@ -1,0 +1,2441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HASSAM — Birthday Mission</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #3a3a3a;
+            color: #e8e8e8;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        /* PUBG Color System */
+        :root {
+            --bg-deep: #3a3a3a;
+            --surface: #4a4a4a;
+            --surface-light: #5a5a5a;
+            --border-bronze: #6b5a2a;
+            --amber: #d4910a;
+            --amber-hover: #c8a84b;
+            --brass: #c8a84b;
+            --text-primary: #2a2a2a;
+            --text-muted: #8a7d5a;
+            --military-green: #5a7a3a;
+            --health-green: #4a9a3a;
+            --danger-red: #8b2a1a;
+            --white: #e8e8e8;
+            --black: #1a1a1a;
+        }
+
+        /* Typography */
+        .font-teko {
+            font-family: 'Teko', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .font-inter {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes radar-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes radar-ping {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        @keyframes crate-bob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes character-bounce {
+            0% { transform: translate(-50%, 100px) scale(0); }
+            60% { transform: translate(-50%, -20px) scale(1.1); }
+            100% { transform: translate(-50%, 0) scale(1); }
+        }
+
+        @keyframes confetti-burst {
+            0% { 
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% { 
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slide-in-left {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+
+        @keyframes kill-feed-slide {
+            0% { transform: translateX(100%); opacity: 0; }
+            10% { transform: translateX(0); opacity: 1; }
+            90% { transform: translateX(0); opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+
+        @keyframes banana-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0.3; }
+        }
+
+        @keyframes monkey-popup {
+            0% { opacity: 0; transform: scale(0.3) translateY(100px); }
+            50% { transform: scale(1.1) translateY(-20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes monkey-bounce {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            25% { transform: translateY(-20px) rotate(5deg); }
+            50% { transform: translateY(0) rotate(-3deg); }
+            75% { transform: translateY(-10px) rotate(3deg); }
+        }
+
+        @keyframes ember-float {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+            50% { transform: translateY(-100px) scale(1.2); opacity: 0.3; }
+        }
+
+        @keyframes firework-burst {
+            0% { transform: rotate(var(--angle)) translateX(0) scale(1); opacity: 1; }
+            100% { transform: rotate(var(--angle)) translateX(100px) scale(0); opacity: 0; }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        @keyframes progress-fill {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        /* Utility Classes */
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        .hidden {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        /* PUBG Button */
+        .pubg-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 32px;
+            background: var(--amber);
+            color: var(--black);
+            font-family: 'Teko', sans-serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pubg-btn:hover {
+            background: var(--amber-hover);
+            transform: scale(1.02);
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            inset: 0;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loading-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://cdn.cloudflare.steamstatic.com/steam/apps/578080/header.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.4;
+        }
+
+        .loading-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .loading-brand {
+            font-family: 'Teko', sans-serif;
+            font-size: 0.875rem;
+            letter-spacing: 6px;
+            color: var(--brass);
+            margin-bottom: 1rem;
+        }
+
+        .loading-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--white);
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-bar {
+            width: 280px;
+            height: 6px;
+            border: 1px solid var(--border-bronze);
+            background: var(--black);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--amber);
+            animation: progress-fill 2.5s ease-in-out forwards;
+        }
+
+        .loading-percent {
+            font-family: 'Inter', monospace;
+            font-size: 0.75rem;
+            color: var(--health-green);
+            letter-spacing: 0.1em;
+            margin-top: 0.75rem;
+        }
+
+        .loading-status {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            margin-top: 2rem;
+            animation: blink 1s step-end infinite;
+        }
+
+        /* HUD */
+        #hud {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 44px;
+            background: rgba(20, 20, 20, 0.98);
+            border-bottom: 1px solid var(--surface-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            z-index: 1000;
+            font-family: 'Teko', sans-serif;
+        }
+
+        .hud-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hud-name {
+            font-size: 1rem;
+            color: var(--amber);
+            letter-spacing: 0.1em;
+        }
+
+        .hud-icon {
+            width: 20px;
+            height: 20px;
+            background: var(--military-green);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        .hud-center {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .hud-bar {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .hud-bar-label {
+            font-size: 0.625rem;
+            color: var(--text-muted);
+        }
+
+        .hud-bar-track {
+            width: 60px;
+            height: 8px;
+            background: var(--black);
+            border: 1px solid var(--surface-light);
+        }
+
+        .hud-bar-fill {
+            height: 100%;
+            background: var(--health-green);
+        }
+
+        .hud-bar-fill.health { width: 80%; }
+        .hud-bar-fill.xp { width: 60%; background: var(--amber); }
+
+        .hud-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Inter', monospace;
+            font-size: 0.75rem;
+            color: var(--health-green);
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Hero Section */
+        #hero {
+            padding-top: 44px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://cdn.cloudflare.steamstatic.com/steam/apps/578080/header.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.5) 0%, rgba(26,26,26,0.7) 50%, rgba(42,42,42,0.85) 100%);
+        }
+
+        .embers-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .ember {
+            position: absolute;
+            border-radius: 50%;
+            animation: ember-float 6s ease-in-out infinite;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        .hero-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-label-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--military-green);
+            border-radius: 2px;
+            animation: blink 1s step-end infinite;
+        }
+
+        .hero-label-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            letter-spacing: 8px;
+            color: var(--military-green);
+            text-transform: uppercase;
+        }
+
+        .hero-name {
+            font-family: 'Teko', sans-serif;
+            font-size: clamp(80px, 20vw, 140px);
+            font-weight: 700;
+            line-height: 1;
+            color: var(--white);
+            letter-spacing: 0.05em;
+            text-shadow: 0 0 40px rgba(212, 145, 10, 0.4);
+        }
+
+        .hero-mission {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-top: 1rem;
+        }
+
+        .hero-date {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            color: var(--health-green);
+            letter-spacing: 0.1em;
+            margin-top: 0.5rem;
+        }
+
+        .scroll-indicator {
+            margin-top: 2rem;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        .scroll-indicator svg {
+            width: 32px;
+            height: 32px;
+            color: var(--amber);
+            margin: 0 auto;
+        }
+
+        .scroll-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.625rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            margin-top: 0.5rem;
+        }
+
+        /* Battle Royale Section */
+        #battle-royale .section-bg {
+            background-image: url('https://media.giphy.com/media/xT9DPpf0zTqRASyzTi/giphy.gif');
+            background-size: cover;
+            background-position: center;
+        }
+
+        #battle-royale .section-overlay {
+            background: rgba(10, 10, 10, 0.4);
+        }
+
+        .section-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        .br-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .br-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--amber);
+            border-radius: 2px;
+            animation: blink 1s step-end infinite;
+        }
+
+        .br-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            letter-spacing: 6px;
+            color: var(--amber);
+            text-transform: uppercase;
+        }
+
+        .br-title {
+            font-family: 'Teko', sans-serif;
+            font-size: clamp(40px, 10vw, 60px);
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 0.05em;
+        }
+
+        .br-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            margin-top: 0.5rem;
+        }
+
+        /* Mission Briefing Section */
+        #mission-briefing .section-bg {
+            background-image: url('https://media.giphy.com/media/3o7TKtnuHOHHUjR38Y/giphy.gif');
+            background-size: cover;
+            background-position: center;
+        }
+
+        #mission-briefing .section-overlay {
+            background: linear-gradient(to bottom, rgba(26,26,26,0.7) 0%, rgba(26,26,26,0.8) 50%, rgba(42,42,42,0.9) 100%);
+        }
+
+        .mission-panel {
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid var(--border-bronze);
+            padding: 2rem;
+            max-width: 680px;
+            width: 90%;
+            position: relative;
+        }
+
+        .corner-bracket {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-color: var(--amber);
+            border-style: solid;
+        }
+
+        .corner-bracket.tl { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
+        .corner-bracket.tr { top: 8px; right: 8px; border-width: 2px 2px 0 0; }
+        .corner-bracket.bl { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; }
+        .corner-bracket.br { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+
+        .radar {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 1px solid rgba(90, 122, 58, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .radar-ping {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px solid rgba(90, 122, 58, 0.3);
+            animation: radar-ping 2s ease-out infinite;
+        }
+
+        .radar-line {
+            width: 2px;
+            height: 24px;
+            background: var(--military-green);
+            animation: radar-spin 4s linear infinite;
+            transform-origin: bottom center;
+        }
+
+        .mission-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-header-icon {
+            color: var(--text-muted);
+        }
+
+        .mission-header-text {
+            font-family: 'Teko', sans-serif;
+            font-size: 0.875rem;
+            letter-spacing: 6px;
+            color: var(--text-muted);
+        }
+
+        .mission-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 2rem;
+        }
+
+        .mission-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            line-height: 1.8;
+            color: #c8b898;
+            min-height: 200px;
+        }
+
+        .mission-signature {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.25rem;
+            font-style: italic;
+            color: var(--brass);
+            text-align: right;
+            margin-top: 1.5rem;
+        }
+
+        .mission-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 1.5rem;
+        }
+
+        .mission-chip {
+            padding: 4px 12px;
+            border: 1px solid var(--military-green);
+            color: var(--military-green);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .mission-complete {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            color: var(--military-green);
+            letter-spacing: 0.1em;
+        }
+
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        /* Airdrop Section */
+        #airdrop .section-bg {
+            background-image: url('https://cdn.cloudflare.steamstatic.com/steam/apps/578080/ss_f9036a87a6fd22736e2a77e4a5d7e24a27e6e23d.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        #airdrop .section-overlay {
+            background: rgba(26, 26, 26, 0.8);
+        }
+
+        .airdrop-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .parachute {
+            position: absolute;
+            top: -64px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .parachute-canopy {
+            width: 128px;
+            height: 64px;
+            background: var(--brass);
+            border-radius: 64px 64px 0 0;
+            position: relative;
+        }
+
+        .parachute-strings {
+            display: flex;
+            gap: 40px;
+        }
+
+        .parachute-string {
+            width: 1px;
+            height: 80px;
+            background: var(--text-muted);
+        }
+
+        .crate-wrapper {
+            position: relative;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .crate-wrapper:not(.open) {
+            animation: crate-bob 2.5s ease-in-out infinite;
+        }
+
+        .crate-lid {
+            position: absolute;
+            top: -4px;
+            left: 0;
+            right: 0;
+            height: 16px;
+            background: #3a4a22;
+            border: 1px solid var(--border-bronze);
+            transition: transform 0.5s ease;
+            transform-origin: bottom center;
+        }
+
+        .crate-wrapper.open .crate-lid {
+            transform: rotateX(-110deg);
+        }
+
+        .crate {
+            width: 160px;
+            height: 128px;
+            background: #2d3a1a;
+            border: 2px solid var(--border-bronze);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .warning-stripes {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(139, 42, 26, 0.3) 10px,
+                rgba(139, 42, 26, 0.3) 20px
+            );
+            opacity: 0.3;
+        }
+
+        .crate-bolt {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--brass);
+        }
+
+        .crate-bolt.tl { top: 8px; left: 8px; }
+        .crate-bolt.tr { top: 8px; right: 8px; }
+        .crate-bolt.bl { bottom: 8px; left: 8px; }
+        .crate-bolt.br { bottom: 8px; right: 8px; }
+
+        .crate-label-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .crate-label-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            color: var(--brass);
+            letter-spacing: 0.1em;
+        }
+
+        .character-pop {
+            position: absolute;
+            top: -160px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: character-bounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        .character-frame {
+            width: 112px;
+            height: 144px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid var(--amber);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            background: var(--surface);
+        }
+
+        .character-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+        }
+
+        .confetti-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            width: 0;
+            height: 0;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .airdrop-instructions {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .airdrop-pulse {
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        .airdrop-hint {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .airdrop-result {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .airdrop-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--amber);
+            margin-bottom: 1rem;
+        }
+
+        .airdrop-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .airdrop-continue {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            color: var(--military-green);
+            letter-spacing: 0.1em;
+            margin-top: 1rem;
+        }
+
+        /* Monkey Popup */
+        .monkey-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .banana-rain {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .banana {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: banana-fall 3s linear infinite;
+        }
+
+        .monkey-popup {
+            background: var(--surface);
+            border: 2px solid var(--amber);
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            animation: monkey-popup 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .monkey-emoji {
+            font-size: 120px;
+            line-height: 1;
+            animation: monkey-bounce 1s ease-in-out infinite;
+        }
+
+        .monkey-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.5rem;
+            color: var(--amber);
+            letter-spacing: 0.1em;
+            margin-top: 1rem;
+        }
+
+        .monkey-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .monkey-btn {
+            margin-top: 1.5rem;
+        }
+
+        /* Squad Gallery Section */
+        #squad-gallery .section-bg {
+            background-image: url('https://cdn.cloudflare.steamstatic.com/steam/apps/578080/ss_3de0b8d5a0bb5e9f24b20cb42b4d63eef3e99082.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        #squad-gallery .section-overlay {
+            background: rgba(26, 26, 26, 0.75);
+        }
+
+        .squad-container {
+            width: 100%;
+            padding: 0 1rem;
+        }
+
+        .squad-header {
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
+        .squad-title {
+            font-family: 'Teko', sans-serif;
+            font-size: clamp(32px, 8vw, 48px);
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .squad-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            color: var(--military-green);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+        }
+
+        .squad-divider {
+            width: 100%;
+            height: 1px;
+            background: var(--border-bronze);
+            margin-top: 1rem;
+        }
+
+        .gallery-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .gallery-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 1rem 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .gallery-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .gallery-arrow {
+            width: 40px;
+            height: 40px;
+            background: var(--surface);
+            border: 1px solid var(--border-bronze);
+            color: var(--brass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: border-color 0.2s ease;
+        }
+
+        .gallery-arrow:hover {
+            border-color: var(--amber);
+        }
+
+        .gallery-arrow svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .photo-card {
+            flex-shrink: 0;
+            width: 208px;
+            height: 288px;
+            background: var(--surface);
+            border: 1px solid var(--border-bronze);
+            padding: 4px;
+            scroll-snap-align: start;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .photo-card:hover {
+            transform: scale(1.04);
+            border-color: var(--amber);
+        }
+
+        .photo-bracket {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-color: var(--amber);
+            border-style: solid;
+        }
+
+        .photo-bracket.tl { top: 0; left: 0; border-width: 1px 0 0 1px; }
+        .photo-bracket.tr { top: 0; right: 0; border-width: 1px 1px 0 0; }
+        .photo-bracket.bl { bottom: 0; left: 0; border-width: 0 0 1px 1px; }
+        .photo-bracket.br { bottom: 0; right: 0; border-width: 0 1px 1px 0; }
+
+        .photo-frame {
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .photo-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+
+        .photo-placeholder svg {
+            width: 32px;
+            height: 32px;
+            color: var(--border-bronze);
+            margin-bottom: 8px;
+        }
+
+        .photo-placeholder-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.625rem;
+            text-align: center;
+        }
+
+        .instagram-embed {
+            width: 100%;
+            height: 100%;
+            border: none;
+            margin-top: -60px;
+            min-height: calc(100% + 60px);
+        }
+
+        .photo-label {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            font-family: 'Teko', sans-serif;
+            font-size: 0.75rem;
+            color: var(--brass);
+            letter-spacing: 0.1em;
+        }
+
+        .gallery-hint {
+            text-align: center;
+            margin-top: 1rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+        }
+
+        .gallery-continue {
+            text-align: center;
+            margin-top: 2rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            color: var(--military-green);
+            letter-spacing: 0.1em;
+        }
+
+        /* Player Stats Section */
+        #player-stats .section-bg {
+            background: var(--surface);
+        }
+
+        #player-stats .section-overlay {
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(26,26,26,0.8) 100%);
+        }
+
+        .stats-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 0 1rem;
+            max-width: 1024px;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .stats-container {
+                flex-direction: row;
+                gap: 4rem;
+            }
+        }
+
+        .player-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .player-frame {
+            width: 192px;
+            height: 256px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 2px solid var(--border-bronze);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            background: linear-gradient(to bottom, #2d3a1a, #1e2812);
+        }
+
+        @media (min-width: 768px) {
+            .player-frame {
+                width: 256px;
+                height: 320px;
+            }
+        }
+
+        .player-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+        }
+
+        .player-name {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.5rem;
+            color: var(--white);
+            margin-top: 1rem;
+        }
+
+        .player-rank {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            color: var(--military-green);
+            letter-spacing: 0.1em;
+        }
+
+        .stats-panel {
+            flex: 1;
+            width: 100%;
+            background: var(--surface);
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .stats-panel {
+                padding: 2rem;
+            }
+        }
+
+        .royale-badge {
+            position: absolute;
+            top: -16px;
+            right: -16px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 2px solid var(--amber);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .royale-badge {
+                top: -24px;
+                right: -24px;
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        .royale-badge svg {
+            width: 16px;
+            height: 16px;
+            color: var(--amber);
+            fill: var(--amber);
+        }
+
+        @media (min-width: 768px) {
+            .royale-badge svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        .royale-badge-text {
+            font-family: 'Teko', sans-serif;
+            font-size: 0.5rem;
+            color: var(--white);
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        @media (min-width: 768px) {
+            .royale-badge-text {
+                font-size: 0.625rem;
+            }
+        }
+
+        .stats-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-header-icon {
+            color: var(--amber);
+        }
+
+        .stats-header-text {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.125rem;
+            color: var(--amber);
+            letter-spacing: 0.1em;
+        }
+
+        .stats-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .stats-title {
+                font-size: 1.75rem;
+            }
+        }
+
+        .stat-bar {
+            margin-bottom: 1rem;
+        }
+
+        .stat-bar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .stat-bar-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .stat-bar-value {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.125rem;
+            color: var(--white);
+        }
+
+        .stat-track {
+            width: 100%;
+            height: 8px;
+            background: var(--black);
+            border: 1px solid var(--border-bronze);
+            overflow: hidden;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--amber) 0%, var(--brass) 100%);
+            box-shadow: 0 0 10px rgba(212, 145, 10, 0.3);
+            transition: width 1s ease-out;
+        }
+
+        .stats-divider {
+            width: 100%;
+            height: 1px;
+            background: rgba(107, 90, 42, 0.5);
+            margin: 1.5rem 0;
+        }
+
+        .extra-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .extra-stat {
+            text-align: center;
+        }
+
+        .extra-stat-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.625rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .extra-stat-value {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.125rem;
+            color: var(--brass);
+        }
+
+        .legend-banner {
+            margin-top: 1.5rem;
+            margin-left: -1.5rem;
+            margin-right: -1.5rem;
+            margin-bottom: -1.5rem;
+            background: var(--amber);
+            padding: 8px;
+            animation: slide-in-left 0.5s ease-out forwards;
+        }
+
+        @media (min-width: 768px) {
+            .legend-banner {
+                margin-left: -2rem;
+                margin-right: -2rem;
+                margin-bottom: -2rem;
+            }
+        }
+
+        .legend-banner-text {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--black);
+            text-align: center;
+            letter-spacing: 0.1em;
+        }
+
+        @media (min-width: 768px) {
+            .legend-banner-text {
+                font-size: 1.25rem;
+            }
+        }
+
+        .stats-continue {
+            text-align: center;
+            margin-top: 2rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            color: var(--military-green);
+            letter-spacing: 0.1em;
+        }
+
+        /* Birthday Card Section */
+        #birthday-card .section-bg {
+            background: var(--surface);
+        }
+
+        #birthday-card .section-overlay {
+            background: rgba(10, 10, 10, 0.6);
+        }
+
+        .card-container {
+            perspective: 1000px;
+            width: 300px;
+            height: 420px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+        }
+
+        .card-container.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            background: var(--surface);
+            border: 2px solid var(--border-bronze);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-face-front {
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-face-back {
+            transform: rotateY(180deg);
+            background: #2a2a2a;
+        }
+
+        .card-bracket {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-color: var(--amber);
+            border-style: solid;
+        }
+
+        .card-bracket.tl { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
+        .card-bracket.tr { top: 8px; right: 8px; border-width: 2px 2px 0 0; }
+        .card-bracket.bl { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; }
+        .card-bracket.br { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+
+        .card-icon {
+            color: var(--amber);
+            margin-bottom: 1rem;
+        }
+
+        .card-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .card-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.625rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--white);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-recipient {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            color: var(--brass);
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-hint {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            color: var(--amber);
+            letter-spacing: 0.1em;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        .card-message {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-family: 'Caveat', cursive;
+            font-size: 1.25rem;
+            color: #d4c8a8;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .card-share-btn {
+            margin-top: 1rem;
+        }
+
+        .card-share-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .card-continue {
+            text-align: center;
+            margin-top: 2rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            color: var(--military-green);
+            letter-spacing: 0.1em;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 64px;
+            right: 16px;
+            background: var(--surface);
+            border-left: 4px solid var(--health-green);
+            padding: 12px 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 10000;
+            animation: kill-feed-slide 3s ease-in-out forwards;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--health-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toast-icon svg {
+            width: 12px;
+            height: 12px;
+            color: var(--black);
+        }
+
+        .toast-text {
+            font-family: 'Teko', sans-serif;
+            font-size: 0.875rem;
+            color: var(--white);
+            letter-spacing: 0.1em;
+        }
+
+        /* Chicken Dinner Section */
+        #chicken-dinner .section-bg {
+            background-image: url('https://media.giphy.com/media/xT9DPpf0zTqRASyzTi/giphy.gif');
+            background-size: cover;
+            background-position: center;
+        }
+
+        #chicken-dinner .section-overlay {
+            background: rgba(26, 26, 26, 0.75);
+        }
+
+        .finale-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        .finale-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            letter-spacing: 6px;
+            color: var(--military-green);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .finale-title-1 {
+            font-family: 'Teko', sans-serif;
+            font-size: clamp(48px, 12vw, 80px);
+            font-weight: 700;
+            color: var(--amber);
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(212, 145, 10, 0.5);
+        }
+
+        .finale-title-2 {
+            font-family: 'Teko', sans-serif;
+            font-size: clamp(56px, 15vw, 96px);
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1;
+        }
+
+        .finale-champion {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.25rem;
+            color: var(--military-green);
+            letter-spacing: 0.1em;
+            margin-top: 1rem;
+        }
+
+        .finale-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin: 1.5rem 0;
+        }
+
+        .finale-divider-line {
+            width: 64px;
+            height: 1px;
+            background: var(--border-bronze);
+        }
+
+        @media (min-width: 768px) {
+            .finale-divider-line {
+                width: 96px;
+            }
+        }
+
+        .finale-divider-icon {
+            color: var(--border-bronze);
+        }
+
+        .finale-message {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .finale-btn {
+            margin-top: 2rem;
+        }
+
+        .fireworks-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .firework {
+            position: absolute;
+        }
+
+        .firework-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: firework-burst 4s ease-out infinite;
+        }
+
+        /* Common Section Background/Overlay */
+        .section-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .section-overlay {
+            position: absolute;
+            inset: 0;
+        }
+
+        .hidden-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .hidden-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-bg"></div>
+        <div class="loading-content">
+            <p class="loading-brand">PLAYERUNKNOWN'S</p>
+            <h1 class="loading-title">LOADING BIRTHDAY MISSION</h1>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <p class="loading-percent" id="loading-percent">0%</p>
+            <p class="loading-status">INITIALIZING SQUAD DATA...</p>
+        </div>
+    </div>
+
+    <!-- HUD -->
+    <nav id="hud" style="display: none;">
+        <div class="hud-left">
+            <span class="hud-name">HASSAM</span>
+            <div class="hud-icon"></div>
+        </div>
+        <div class="hud-center">
+            <div class="hud-bar">
+                <span class="hud-bar-label">HP</span>
+                <div class="hud-bar-track">
+                    <div class="hud-bar-fill health"></div>
+                </div>
+            </div>
+            <div class="hud-bar">
+                <span class="hud-bar-label">XP</span>
+                <div class="hud-bar-track">
+                    <div class="hud-bar-fill xp"></div>
+                </div>
+            </div>
+        </div>
+        <div class="hud-right" id="clock">
+            00:00:00
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" style="display: none;">
+        <!-- Hero Section -->
+        <section id="hero" class="hidden-section">
+            <div class="hero-bg"></div>
+            <div class="hero-overlay"></div>
+            <div class="embers-container" id="embers"></div>
+            <div class="hero-content">
+                <div class="hero-label">
+                    <span class="hero-label-dot"></span>
+                    <span class="hero-label-text">PLAYER IDENTIFIED</span>
+                </div>
+                <h1 class="hero-name">HASSAM</h1>
+                <p class="hero-mission">BIRTHDAY MISSION INITIATED</p>
+                <p class="hero-date">MON, APR 20, 2026</p>
+                <div class="scroll-indicator">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                    <p class="scroll-text">SCROLL TO EXPLORE</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Battle Royale Section -->
+        <section id="battle-royale" class="hidden-section">
+            <div class="section-bg"></div>
+            <div class="section-overlay"></div>
+            <div class="section-content">
+                <div class="br-badge">
+                    <span class="br-dot"></span>
+                    <span class="br-label">Battle Royale</span>
+                </div>
+                <h2 class="br-title">GET READY</h2>
+                <p class="br-subtitle">THE MISSION BEGINS</p>
+            </div>
+        </section>
+
+        <!-- Mission Briefing Section -->
+        <section id="mission-briefing" class="hidden-section">
+            <div class="section-bg"></div>
+            <div class="section-overlay"></div>
+            <div class="mission-panel">
+                <div class="corner-bracket tl"></div>
+                <div class="corner-bracket tr"></div>
+                <div class="corner-bracket bl"></div>
+                <div class="corner-bracket br"></div>
+                
+                <div class="radar">
+                    <div class="radar-ping"></div>
+                    <div class="radar-line"></div>
+                </div>
+
+                <div class="mission-header">
+                    <span class="mission-header-icon">◆</span>
+                    <span class="mission-header-text">CLASSIFIED TRANSMISSION</span>
+                    <span class="mission-header-icon">◆</span>
+                </div>
+
+                <h2 class="mission-title">TRANSMISSION RECEIVED</h2>
+
+                <div class="mission-text" id="mission-text">
+                    <span class="cursor-blink">_</span>
+                </div>
+
+                <p class="mission-signature">— YOUR SQUAD. ALWAYS.</p>
+
+                <div class="mission-chips">
+                    <span class="mission-chip">FRIENDSHIP: LEGENDARY</span>
+                    <span class="mission-chip">LOYALTY: 99/100</span>
+                </div>
+
+                <div class="mission-complete" id="mission-complete" style="display: none;">
+                    ◆ TRANSMISSION COMPLETE — SCROLL TO CONTINUE ◆
+                </div>
+            </div>
+        </section>
+
+        <!-- Airdrop Section -->
+        <section id="airdrop" class="hidden-section">
+            <div class="section-bg"></div>
+            <div class="section-overlay"></div>
+            <div class="airdrop-container">
+                <div class="parachute">
+                    <div class="parachute-canopy"></div>
+                    <div class="parachute-strings">
+                        <div class="parachute-string"></div>
+                        <div class="parachute-string"></div>
+                    </div>
+                </div>
+
+                <div class="crate-wrapper" id="crate-wrapper">
+                    <div class="crate-lid"></div>
+                    <div class="crate" id="crate">
+                        <div class="warning-stripes"></div>
+                        <div class="crate-bolt tl"></div>
+                        <div class="crate-bolt tr"></div>
+                        <div class="crate-bolt bl"></div>
+                        <div class="crate-bolt br"></div>
+                        <span class="crate-label-title">AIRDROP</span>
+                        <span class="crate-label-subtitle">FOR: HASSAM</span>
+                    </div>
+                    <div class="character-pop" id="character-pop" style="display: none;">
+                        <div class="character-frame">
+                            <img src="/hassam-tuxedo.png" alt="Hassam" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>'">
+                        </div>
+                    </div>
+                    <div class="confetti-container" id="confetti-container"></div>
+                </div>
+
+                <div class="airdrop-instructions" id="airdrop-instructions">
+                    <p class="airdrop-hint airdrop-pulse">
+                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display: inline-block; vertical-align: middle;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                        </svg>
+                        <span style="margin-left: 8px;">TAP TO OPEN</span>
+                    </p>
+                </div>
+
+                <div class="airdrop-result" id="airdrop-result" style="display: none;">
+                    <h2 class="airdrop-title">SURPRISE! HAPPY BIRTHDAY HASSAM! 🎉</h2>
+                    <div class="airdrop-buttons">
+                        <button class="pubg-btn" id="close-airdrop">
+                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="margin-right: 8px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            CLOSE
+                        </button>
+                    </div>
+                    <p class="airdrop-continue">◆ SCROLL TO CONTINUE ◆</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Squad Gallery Section -->
+        <section id="squad-gallery" class="hidden-section">
+            <div class="section-bg"></div>
+            <div class="section-overlay"></div>
+            <div class="squad-container">
+                <div class="squad-header">
+                    <h2 class="squad-title">SQUAD GALLERY</h2>
+                    <p class="squad-subtitle">CLASSIFIED ARCHIVE — EYES ONLY</p>
+                    <div class="squad-divider"></div>
+                </div>
+
+                <div class="gallery-wrapper">
+                    <button class="gallery-arrow" id="gallery-left">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+
+                    <div class="gallery-scroll" id="gallery-scroll">
+                        <!-- Photo cards will be generated by JS -->
+                    </div>
+
+                    <button class="gallery-arrow" id="gallery-right">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+
+                <p class="gallery-hint">◄ SWIPE TO BROWSE ARCHIVE ►</p>
+                <p class="gallery-continue">◆ SCROLL TO VIEW COMBAT STATS ◆</p>
+            </div>
+        </section>
+
+        <!-- Player Stats Section -->
+        <section id="player-stats" class="hidden-section">
+            <div class="section-bg"></div>
+            <div class="section-overlay"></div>
+            <div class="stats-container">
+                <div class="player-display">
+                    <div class="player-frame">
+                        <img src="/hassam-casual.png" alt="Hassam" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                        <div style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-size: 64px;">🎮</div>
+                    </div>
+                    <h3 class="player-name">HASSAM</h3>
+                    <p class="player-rank">SQUAD LEADER — BIRTHDAY SEASON</p>
+                </div>
+
+                <div class="stats-panel">
+                    <div class="royale-badge">
+                        <svg fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <span class="royale-badge-text">ROYALE PASS<br>BIRTHDAY</span>
+                    </div>
+
+                    <div class="stats-header">
+                        <span class="stats-header-icon">★</span>
+                        <span class="stats-header-text">LEGEND UNLOCKED</span>
+                    </div>
+
+                    <h2 class="stats-title">COMBAT STATS</h2>
+
+                    <div id="stats-bars">
+                        <!-- Stat bars will be generated by JS -->
+                    </div>
+
+                    <div class="stats-divider"></div>
+
+                    <div class="extra-stats">
+                        <div class="extra-stat">
+                            <p class="extra-stat-label">FRIENDSHIP RANK</p>
+                            <p class="extra-stat-value">CONQUEROR</p>
+                        </div>
+                        <div class="extra-stat">
+                            <p class="extra-stat-label">HUMOR</p>
+                            <p class="extra-stat-value">ELITE</p>
+                        </div>
+                        <div class="extra-stat">
+                            <p class="extra-stat-label">HEART</p>
+                            <p class="extra-stat-value">UNMATCHED</p>
+                        </div>
+                    </div>
+
+                    <div class="legend-banner" id="legend-banner" style="display: none;">
+                        <p class="legend-banner-text">★ LEGEND UNLOCKED ★</p>
+                    </div>
+                </div>
+            </div>
+            <p class="stats-continue">◆ SCROLL TO OPEN BIRTHDAY CARD ◆</p>
+        </section>
+
+        <!-- Birthday Card Section -->
+        <section id="birthday-card" class="hidden-section">
+            <div class="section-bg"></div>
+            <div class="section-overlay"></div>
+            <div class="card-container" id="card-container">
+                <div class="card-inner">
+                    <div class="card-face card-face-front">
+                        <div class="card-bracket tl"></div>
+                        <div class="card-bracket tr"></div>
+                        <div class="card-bracket bl"></div>
+                        <div class="card-bracket br"></div>
+                        
+                        <div class="card-icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <p class="card-label">OPEN ORDERS:</p>
+                        <h2 class="card-title">BIRTHDAY CELEBRATION</h2>
+                        <p class="card-recipient">FOR: HASSAM</p>
+                        <p class="card-hint">► TAP TO OPEN ◄</p>
+                    </div>
+
+                    <div class="card-face card-face-back">
+                        <div class="card-bracket tl"></div>
+                        <div class="card-bracket tr"></div>
+                        <div class="card-bracket bl"></div>
+                        <div class="card-bracket br"></div>
+
+                        <div class="card-message">
+                            Happy Birthday, Hassam! 🎂<br><br>
+                            Another season, another Chicken Dinner.<br>
+                            You make every match worth playing.<br>
+                            Here's to loud laughs, wild wins,<br>
+                            and a year full of legendary moments.<br><br>
+                            — Always your squad.
+                        </div>
+
+                        <button class="pubg-btn card-share-btn" id="share-card">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="margin-right: 8px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                            </svg>
+                            SHARE THIS CARD
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <p class="card-continue" id="card-continue" style="display: none;">
+                ◆ SCROLL TO CONTINUE TO FINALE ◆
+            </p>
+        </section>
+
+        <!-- Chicken Dinner Section -->
+        <section id="chicken-dinner" class="hidden-section">
+            <div class="section-bg"></div>
+            <div class="section-overlay"></div>
+            <div class="fireworks-container" id="fireworks"></div>
+            <div class="finale-content">
+                <p class="finale-label">MATCH RESULT</p>
+                <h1 class="finale-title-1">WINNER WINNER</h1>
+                <h2 class="finale-title-2">BIRTHDAY DINNER</h2>
+                <p class="finale-champion">HASSAM — SEASON CHAMPION</p>
+                <div class="finale-divider">
+                    <div class="finale-divider-line"></div>
+                    <span class="finale-divider-icon">◆</span>
+                    <div class="finale-divider-line"></div>
+                </div>
+                <p class="finale-message">
+                    From your best friend, with love. Here's to another legendary season — may every drop land hot and every loot be loaded.
+                </p>
+                <button class="pubg-btn finale-btn" id="restart-btn">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="margin-right: 8px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                    </svg>
+                    RETURN TO LOBBY
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script>
+        // Loading Screen
+        let loadingProgress = 0;
+        const loadingScreen = document.getElementById('loading-screen');
+        const loadingPercent = document.getElementById('loading-percent');
+        const hud = document.getElementById('hud');
+        const mainContent = document.getElementById('main-content');
+
+        function updateLoading() {
+            loadingProgress += 2;
+            loadingPercent.textContent = loadingProgress + '%';
+            
+            if (loadingProgress >= 100) {
+                setTimeout(() => {
+                    loadingScreen.classList.add('hidden');
+                    hud.style.display = 'flex';
+                    mainContent.style.display = 'block';
+                    initIntersectionObserver();
+                    initEmbers();
+                    initMissionText();
+                    initStatsBars();
+                    initGallery();
+                    initFireworks();
+                }, 300);
+            } else {
+                setTimeout(updateLoading, 50);
+            }
+        }
+
+        setTimeout(updateLoading, 100);
+
+        // Clock
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { hour12: false });
+            document.getElementById('clock').textContent = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Intersection Observer for scroll animations
+        function initIntersectionObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            document.querySelectorAll('.hidden-section').forEach(section => {
+                observer.observe(section);
+            });
+        }
+
+        // Embers
+        function initEmbers() {
+            const embersContainer = document.getElementById('embers');
+            for (let i = 0; i < 25; i++) {
+                const ember = document.createElement('div');
+                ember.className = 'ember';
+                ember.style.left = Math.random() * 100 + '%';
+                ember.style.top = Math.random() * 100 + '%';
+                ember.style.width = (2 + Math.random() * 3) + 'px';
+                ember.style.height = ember.style.width;
+                ember.style.background = i % 3 === 0 ? '#d4910a' : '#c8a84b';
+                ember.style.animationDelay = Math.random() * 5 + 's';
+                ember.style.animationDuration = (6 + Math.random() * 4) + 's';
+                embersContainer.appendChild(ember);
+            }
+        }
+
+        // Mission Briefing Text Animation
+        function initMissionText() {
+            const fullMessage = `Channel opened. Squad communication secure.
+
+Hassam — another year, another season. We've dropped into countless battles together, from Pochinki chaos to those impossible final circles. You've always been the reliable callout, the clutch revive, the one who never leaves a teammate behind.
+
+This isn't just another birthday. This is a celebration of every Chicken Dinner we've earned, every laugh shared over comms, and every moment that proved why you're the heart of this squad.
+
+May your loot always be legendary. May your zones always favor you. And may this next season bring you everything you've been grinding for.`;
+
+            const missionText = document.getElementById('mission-text');
+            const missionComplete = document.getElementById('mission-complete');
+            let decryptedChars = 0;
+
+            function decrypt() {
+                if (decryptedChars < fullMessage.length) {
+                    decryptedChars += 3;
+                    let displayText = '';
+                    
+                    for (let i = 0; i < fullMessage.length; i++) {
+                        if (i < decryptedChars) {
+                            displayText += fullMessage[i];
+                        } else if (fullMessage[i] === '\n') {
+                            displayText += '\n';
+                        } else {
+                            displayText += String.fromCharCode(33 + Math.floor(Math.random() * 94));
+                        }
+                    }
+                    
+                    missionText.innerHTML = displayText.replace(/\n/g, '<br>') + '<span class="cursor-blink">_</span>';
+                    
+                    if (decryptedChars >= fullMessage.length) {
+                        missionComplete.style.display = 'block';
+                    } else {
+                        setTimeout(decrypt, 1);
+                    }
+                }
+            }
+
+            // Start decryption when section is visible
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && decryptedChars === 0) {
+                        setTimeout(decrypt, 500);
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            observer.observe(document.getElementById('mission-briefing'));
+        }
+
+        // Airdrop
+        const crateWrapper = document.getElementById('crate-wrapper');
+        const crate = document.getElementById('crate');
+        const characterPop = document.getElementById('character-pop');
+        const confettiContainer = document.getElementById('confetti-container');
+        const airdropInstructions = document.getElementById('airdrop-instructions');
+        const airdropResult = document.getElementById('airdrop-result');
+        const closeAirdrop = document.getElementById('close-airdrop');
+
+        crate.addEventListener('click', () => {
+            if (!crateWrapper.classList.contains('open')) {
+                crateWrapper.classList.add('open');
+                characterPop.style.display = 'block';
+                airdropInstructions.style.display = 'none';
+                airdropResult.style.display = 'block';
+
+                // Confetti
+                const colors = ['#d4910a', '#c8a84b', '#4a9a3a', '#e8e8e8'];
+                for (let i = 0; i < 30; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.background = colors[i % 4];
+                    confetti.style.setProperty('--tx', ((Math.random() - 0.5) * 300) + 'px');
+                    confetti.style.setProperty('--ty', ((Math.random() - 0.5) * 300 - 100) + 'px');
+                    confetti.style.animationDelay = (Math.random() * 0.3) + 's';
+                    confettiContainer.appendChild(confetti);
+                }
+
+                // Show monkey popup after 300ms
+                setTimeout(() => {
+                    showMonkeyPopup();
+                }, 300);
+            }
+        });
+
+        closeAirdrop.addEventListener('click', () => {
+            crateWrapper.classList.remove('open');
+            characterPop.style.display = 'none';
+            airdropInstructions.style.display = 'block';
+            airdropResult.style.display = 'none';
+            confettiContainer.innerHTML = '';
+        });
+
+        // Monkey Popup
+        function showMonkeyPopup() {
+            const overlay = document.createElement('div');
+            overlay.className = 'monkey-popup-overlay';
+            overlay.onclick = () => overlay.remove();
+
+            const bananaRain = document.createElement('div');
+            bananaRain.className = 'banana-rain';
+            
+            for (let i = 0; i < 20; i++) {
+                const banana = document.createElement('div');
+                banana.className = 'banana';
+                banana.textContent = '🍌';
+                banana.style.left = Math.random() * 100 + '%';
+                banana.style.animationDelay = Math.random() * 2 + 's';
+                banana.style.animationDuration = (2 + Math.random() * 2) + 's';
+                bananaRain.appendChild(banana);
+            }
+
+            const popup = document.createElement('div');
+            popup.className = 'monkey-popup';
+            popup.onclick = (e) => e.stopPropagation();
+            popup.innerHTML = `
+                <div class="corner-bracket tl"></div>
+                <div class="corner-bracket tr"></div>
+                <div class="corner-bracket bl"></div>
+                <div class="corner-bracket br"></div>
+                <div class="monkey-emoji">🐵</div>
+                <h3 class="monkey-title">OOH OOH AAH AAH!</h3>
+                <p class="monkey-text">the big ear monkey ,</p>
+                <button class="pubg-btn monkey-btn" onclick="this.closest('.monkey-popup-overlay').remove()">
+                    CATCH THE MONKEY
+                </button>
+            `;
+
+            overlay.appendChild(bananaRain);
+            overlay.appendChild(popup);
+            document.body.appendChild(overlay);
+        }
+
+        // Squad Gallery
+        function initGallery() {
+            const photos = [
+                { label: 'SQUAD MEMORY #01', sublabel: 'SQUAD MEMORY', type: 'instagram', url: 'https://www.instagram.com/reel/DIyvj0NIBag/embed/?hidecaption=true' },
+                { label: 'CLASSIFIED FILE', sublabel: 'MISSION RECAP' },
+                { label: 'SQUAD MEMORY #02', sublabel: 'LEGENDARY DROP', type: 'instagram', url: 'https://www.instagram.com/reel/DJtZBUAIdo5/embed/?hidecaption=true' },
+                { label: 'CHICKEN DINNER', sublabel: 'SQUAD MEMORY #03' },
+                { label: 'VICTORY LOG', sublabel: 'REPLAY ARCHIVE' },
+                { label: 'SQUAD MEMORY #04', sublabel: 'POCHKINKI DROP' },
+                { label: 'FINAL CIRCLE', sublabel: 'CLASSIFIED' },
+                { label: 'SQUAD MEMORY #05', sublabel: 'CLUTCH REVIVE' },
+                { label: 'EPIC LOOT', sublabel: 'SQUAD MEMORY #06' }
+            ];
+
+            const galleryScroll = document.getElementById('gallery-scroll');
+            
+            photos.forEach((photo, index) => {
+                const card = document.createElement('div');
+                card.className = 'photo-card';
+                card.innerHTML = `
+                    <div class="photo-bracket tl"></div>
+                    <div class="photo-bracket tr"></div>
+                    <div class="photo-bracket bl"></div>
+                    <div class="photo-bracket br"></div>
+                    <div class="photo-frame">
+                        ${photo.type === 'instagram' 
+                            ? `<iframe class="instagram-embed" src="${photo.url}" frameborder="0" scrolling="no" allowtransparency="true"></iframe>`
+                            : `<div class="photo-placeholder">
+                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <p class="photo-placeholder-text">MEMORY LOADING...<br><span style="color: #6b5a2a;">[Upload photo here]</span></p>
+                            </div>`
+                        }
+                    </div>
+                    <span class="photo-label">${photo.label}</span>
+                `;
+                galleryScroll.appendChild(card);
+            });
+
+            document.getElementById('gallery-left').addEventListener('click', () => {
+                galleryScroll.scrollBy({ left: -240, behavior: 'smooth' });
+            });
+
+            document.getElementById('gallery-right').addEventListener('click', () => {
+                galleryScroll.scrollBy({ left: 240, behavior: 'smooth' });
+            });
+        }
+
+        // Player Stats
+        function initStatsBars() {
+            const stats = [
+                { label: 'LOYALTY', value: '99/100', percent: 99 },
+                { label: 'VIBE LEVEL', value: 'S-TIER', percent: 100 },
+                { label: 'BIRTHDAY ENERGY', value: 'MAXED', percent: 100 },
+                { label: 'SQUAD BOND', value: 'LEGENDARY', percent: 100 },
+                { label: 'YEARS SURVIVED', value: '∞ SEASONS', percent: 85 }
+            ];
+
+            const statsBars = document.getElementById('stats-bars');
+            const legendBanner = document.getElementById('legend-banner');
+
+            stats.forEach(stat => {
+                const bar = document.createElement('div');
+                bar.className = 'stat-bar';
+                bar.innerHTML = `
+                    <div class="stat-bar-header">
+                        <span class="stat-bar-label">${stat.label}</span>
+                        <span class="stat-bar-value">${stat.value}</span>
+                    </div>
+                    <div class="stat-track">
+                        <div class="stat-fill" style="width: 0%" data-width="${stat.percent}%"></div>
+                    </div>
+                `;
+                statsBars.appendChild(bar);
+            });
+
+            // Animate bars when section is visible
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        document.querySelectorAll('.stat-fill').forEach((fill, index) => {
+                            setTimeout(() => {
+                                fill.style.width = fill.getAttribute('data-width');
+                            }, index * 100);
+                        });
+                        setTimeout(() => {
+                            legendBanner.style.display = 'block';
+                        }, 500);
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            observer.observe(document.getElementById('player-stats'));
+        }
+
+        // Birthday Card
+        const cardContainer = document.getElementById('card-container');
+        const cardContinue = document.getElementById('card-continue');
+        const shareCard = document.getElementById('share-card');
+
+        cardContainer.addEventListener('click', () => {
+            cardContainer.classList.toggle('flipped');
+            if (cardContainer.classList.contains('flipped')) {
+                setTimeout(() => {
+                    cardContinue.style.display = 'block';
+                }, 600);
+            }
+        });
+
+        shareCard.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                showToast('LINK COPIED TO CLIPBOARD');
+            });
+        });
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <span class="toast-text">${message}</span>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Fireworks
+        function initFireworks() {
+            const fireworks = document.getElementById('fireworks');
+            const colors = ['#d4910a', '#4a9a3a', '#e8e8e8', '#c8a84b'];
+
+            for (let i = 0; i < 5; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.left = (20 + i * 15) + '%';
+                firework.style.top = (20 + (i % 2) * 30) + '%';
+
+                for (let j = 0; j < 12; j++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'firework-particle';
+                    particle.style.background = colors[j % 4];
+                    particle.style.setProperty('--angle', (j * 30) + 'deg');
+                    particle.style.animationDelay = (i * 0.8 + j * 0.1) + 's';
+                    firework.appendChild(particle);
+                }
+
+                fireworks.appendChild(firework);
+            }
+        }
+
+        // Restart
+        document.getElementById('restart-btn').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

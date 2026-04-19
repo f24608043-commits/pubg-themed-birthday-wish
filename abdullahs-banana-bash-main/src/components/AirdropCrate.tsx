@@ -4,17 +4,20 @@ import { X, Sparkles } from "lucide-react";
 const AirdropCrate = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showMonkey, setShowMonkey] = useState(false);
 
   const handleOpen = () => {
     if (!isOpen) {
       setIsOpen(true);
       setShowConfetti(true);
+      setTimeout(() => setShowMonkey(true), 300);
     }
   };
 
   const handleClose = () => {
     setIsOpen(false);
     setShowConfetti(false);
+    setShowMonkey(false);
   };
 
   // Generate confetti
@@ -91,7 +94,7 @@ const AirdropCrate = () => {
               <div className="absolute -top-40 left-1/2 -translate-x-1/2 animate-character-bounce">
                 <div className="w-28 h-36 rounded-lg overflow-hidden border-2 border-[#d4910a] shadow-2xl bg-[#1a1a1a]">
                   <img
-                    src="https://ibb.co/1fypzQmV"
+                    src="/hassam-tuxedo.png"
                     alt="Hassam"
                     className="w-full h-full object-cover object-top"
                   />
@@ -144,6 +147,61 @@ const AirdropCrate = () => {
             <p className="font-inter text-xs text-[#5a7a3a] tracking-wider mt-4">
               ◆ SCROLL TO CONTINUE ◆
             </p>
+          </div>
+        )}
+
+        {/* Monkey Popup */}
+        {showMonkey && (
+          <div 
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0a0a]/80 backdrop-blur-sm overflow-hidden"
+            onClick={() => setShowMonkey(false)}
+          >
+            {/* Falling Bananas Background */}
+            <div className="absolute inset-0 pointer-events-none">
+              {Array.from({ length: 20 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute text-2xl animate-banana-fall"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    animationDelay: `${Math.random() * 2}s`,
+                    animationDuration: `${2 + Math.random() * 2}s`,
+                  }}
+                >
+                  🍌
+                </div>
+              ))}
+            </div>
+
+            <div 
+              className="relative bg-[#1a1a1a] border-2 border-[#d4910a] p-8 rounded-lg max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto animate-monkey-popup z-10"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Corner brackets */}
+              <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-[#d4910a]" />
+              <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-[#d4910a]" />
+              <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-[#d4910a]" />
+              <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-[#d4910a]" />
+
+              {/* Monkey animation */}
+              <div className="text-center">
+                <div className="text-[120px] animate-monkey-bounce leading-none">
+                  🐵
+                </div>
+                <h3 className="font-teko text-2xl text-[#d4910a] mt-4 tracking-wider">
+                  OOH OOH AAH AAH!
+                </h3>
+                <p className="font-inter text-sm text-[#8a7d5a] mt-2">
+                  the big ear monkey ,
+                </p>
+                <button 
+                  onClick={() => setShowMonkey(false)}
+                  className="pubg-btn mt-6 text-sm px-6 py-2"
+                >
+                  CATCH THE MONKEY
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

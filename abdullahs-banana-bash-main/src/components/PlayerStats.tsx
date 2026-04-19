@@ -90,7 +90,7 @@ const PlayerStats = () => {
             style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.8)" }}
           >
             <img
-              src="https://ibb.co/PGKZZqwj"
+              src="/hassam-casual.png"
               alt="Hassam"
               className="w-full h-full object-cover object-top"
             />

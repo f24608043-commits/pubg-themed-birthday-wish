@@ -20,8 +20,8 @@ May your loot always be legendary. May your zones always favor you. And may this
   useEffect(() => {
     if (showContent && decryptedChars < fullMessage.length) {
       const timer = setTimeout(() => {
-        setDecryptedChars((prev) => prev + 1);
-      }, 15);
+        setDecryptedChars((prev) => prev + 3);
+      }, 1);
       return () => clearTimeout(timer);
     }
   }, [showContent, decryptedChars, fullMessage.length]);

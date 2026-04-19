@@ -86,16 +86,52 @@ const SquadGallery = () => {
               <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#d4910a]" />
               <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#d4910a]" />
 
-              {/* Photo placeholder */}
-              <div className="w-full h-full bg-[#0a0a0a] flex flex-col items-center justify-center">
-                <Camera className="w-8 h-8 text-[#6b5a2a] mb-2" />
-                <p className="font-inter text-[10px] text-[#8a7d5a] text-center px-4">
-                  MEMORY LOADING...
-                </p>
-                <p className="font-inter text-[10px] text-[#6b5a2a] text-center mt-1">
-                  [Upload photo here]
-                </p>
-              </div>
+              {/* Photo placeholder or Instagram Video */}
+              {index === 0 ? (
+                <div className="w-full h-full bg-[#0a0a0a] flex flex-col items-center justify-center overflow-hidden relative">
+                  <iframe
+                    src="https://www.instagram.com/reel/DIyvj0NIBag/embed/?utm_source=ig_embed&amp;ig_rid=1&amp;hidecaption=true"
+                    width="100%"
+                    height="100%"
+                    frameBorder="0"
+                    scrolling="no"
+                    allowTransparency={true}
+                    allow="autoplay; encrypted-media; picture-in-picture"
+                    className="w-full h-full"
+                    style={{ 
+                      marginTop: "-60px",
+                      minHeight: "calc(100% + 60px)"
+                    }}
+                  />
+                </div>
+              ) : index === 2 ? (
+                <div className="w-full h-full bg-[#0a0a0a] flex flex-col items-center justify-center overflow-hidden relative">
+                  <iframe
+                    src="https://www.instagram.com/reel/DJtZBUAIdo5/embed/?utm_source=ig_embed&amp;ig_rid=1&amp;hidecaption=true"
+                    width="100%"
+                    height="100%"
+                    frameBorder="0"
+                    scrolling="no"
+                    allowTransparency={true}
+                    allow="autoplay; encrypted-media; picture-in-picture"
+                    className="w-full h-full"
+                    style={{ 
+                      marginTop: "-60px",
+                      minHeight: "calc(100% + 60px)"
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="w-full h-full bg-[#0a0a0a] flex flex-col items-center justify-center">
+                  <Camera className="w-8 h-8 text-[#6b5a2a] mb-2" />
+                  <p className="font-inter text-[10px] text-[#8a7d5a] text-center px-4">
+                    MEMORY LOADING...
+                  </p>
+                  <p className="font-inter text-[10px] text-[#6b5a2a] text-center mt-1">
+                    [Upload photo here]
+                  </p>
+                </div>
+              )}
 
               {/* Label */}
               <div className="absolute bottom-1 left-1 right-1 flex justify-between items-end">
